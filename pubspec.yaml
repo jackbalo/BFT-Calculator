@@ -4,18 +4,19 @@ publish_to: 'none'
 version: 0.1.0+1
 
 environment:
-  sdk: ^3.12.2
+  sdk: ^3.13.0
 
 dependencies:
   flutter:
     sdk: flutter
-  google_fonts: ^8.2.1
+  google_fonts:
+  shared_preferences:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
-  flutter_launcher_icons: ^0.13.1
+  flutter_lints:
+  flutter_launcher_icons:
 
 flutter_launcher_icons:
   android: "launcher_icon"
@@ -26,4 +27,11 @@ flutter_launcher_icons:
 flutter:
   uses-material-design: true
   assets: 
+    - assets/gaf.png
+    - assets/gaf2.jpg
     - assets/gaf3.jpg
+    - assets/t1.jpg
+    - assets/t2.jpg
+    - assets/t3.jpg
+    - assets/t4.jpg
+    - assets/t5.jpg

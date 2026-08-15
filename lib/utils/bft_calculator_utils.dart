@@ -108,8 +108,8 @@ class BftCalculatorUtils {
       return 'Please enter your age.';
     }
     final age = int.tryParse(value);
-    if (age == null || age < 18 || age > 60) {
-      return 'Age must be between 18 and 60.';
+    if (age == null || age < 18 || age > 56) {
+      return 'Age must be between 18 and 56.';
     }
     return null;
   }

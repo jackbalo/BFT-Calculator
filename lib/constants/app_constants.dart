@@ -82,7 +82,7 @@ class AppStrings {
   // Form labels
   static const String genderLabel = 'Gender';
   static const String ageLabel = 'Age';
-  static const String ageHint = '18 to 60';
+  static const String ageHint = '18 to 56';
   static const String pushupsLabel = 'Push-ups (count)';
   static const String pushupsHint = 'e.g., 45';
   static const String situpsLabel = 'Sit-ups (count)';
@@ -102,7 +102,7 @@ class AppStrings {
   // Error messages
   static const String selectGenderError = 'Please select your gender.';
   static const String enterAgeError = 'Please enter your age.';
-  static const String invalidAgeError = 'Age must be between 18 and 60.';
+  static const String invalidAgeError = 'Age must be between 18 and 56.';
   static const String noStandardError = 'No matching standard was found.';
   static const String fillAllFieldsError = 'Please fill in all fields.';
   static const String invalidNumbersError = 'Please enter valid numbers.';

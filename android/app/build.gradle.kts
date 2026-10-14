@@ -29,7 +29,7 @@ namespace = "com.baloblack.bft_calculator"
         create("release") {
             keyAlias = "bft-key"
             keyPassword = "BFT@2024Release"
-            storeFile = file("bft-release-key.jks")
+            storeFile = file("../bft-release-key.jks")
             storePassword = "BFT@2024Release"
         }
     }

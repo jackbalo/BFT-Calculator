@@ -93,20 +93,24 @@ class _BftCalculatorPageState extends State<BftCalculatorPage> {
 
     final pushups = int.parse(pushupsText);
     final situps = int.parse(situpsText);
-    final runningMinutes = BftCalculatorUtils.parseRunTimeToMinutes(runningText);
+    final runningSeconds =
+      BftCalculatorUtils.parseRunTimeToSeconds(runningText);
 
     // Calculate percentages
     _pushupsPercentage = BftCalculatorUtils.calculatePushupsPercentage(
       pushups,
-      widget.userData.pushupsMark,
+      widget.userData.age,
+      widget.userData.gender,
     );
     _situpsPercentage = BftCalculatorUtils.calculateSitupsPercentage(
       situps,
-      widget.userData.situpsMark,
+      widget.userData.age,
+      widget.userData.gender,
     );
     _runningPercentage = BftCalculatorUtils.calculateRunningPercentage(
-      runningMinutes,
-      widget.userData.runTimeMark,
+      runningSeconds,
+      widget.userData.age,
+      widget.userData.gender,
     );
 
     _averagePercentage = BftCalculatorUtils.calculateAveragePercentage(

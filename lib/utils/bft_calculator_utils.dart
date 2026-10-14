@@ -1,5 +1,6 @@
 import 'package:bft_calculator/models/bft_user_data.dart';
 import 'package:bft_calculator/constants/bft_standards.dart';
+import 'package:bft_calculator/constants/bft_score_chart.dart';
 
 /// Utility class for BFT calculations and validations
 class BftCalculatorUtils {
@@ -56,34 +57,55 @@ class BftCalculatorUtils {
     return minutes + (seconds / 60.0);
   }
 
-  /// Calculate push-ups percentage
+  /// Calculate push-ups points from the official BFT chart.
   static double calculatePushupsPercentage(
     int userScore,
-    int passmarkScore,
+    int age,
+    String gender,
   ) {
-    double percentage = 60.0 + (userScore - passmarkScore).toDouble();
-    return _capPercentage(percentage);
+    return _lookupRepetitionScore(
+      BftScoreChart.pushups,
+      userScore,
+      _chartColumn(age, gender),
+    );
   }
 
-  /// Calculate sit-ups percentage
+  /// Calculate sit-ups points from the official BFT chart.
   static double calculateSitupsPercentage(
     int userScore,
-    int passmarkScore,
+    int age,
+    String gender,
   ) {
-    double percentage = 60.0 + (userScore - passmarkScore).toDouble();
-    return _capPercentage(percentage);
+    return _lookupRepetitionScore(
+      BftScoreChart.situps,
+      userScore,
+      _chartColumn(age, gender),
+    );
   }
 
-  /// Calculate running percentage
+  /// Calculate running points from the official 6-second BFT chart.
   static double calculateRunningPercentage(
-    double userTimeMinutes,
-    String passmarkTimeStr,
+    int userTimeSeconds,
+    int age,
+    String gender,
   ) {
-    final passmarkTotalSeconds = parseRunTimeToSeconds(passmarkTimeStr);
-    final userTimeSeconds = userTimeMinutes * 60;
-    final secondsDifference = passmarkTotalSeconds - userTimeSeconds;
-    double percentage = 60.0 + (secondsDifference / 60) * 10.0;
-    return _capPercentage(percentage);
+    final chartTime = ((userTimeSeconds + 5) ~/ 6) * 6;
+    final column = _chartColumn(age, gender);
+    int? nearestSlowerScore;
+    var nearestSlowerTime = double.infinity;
+
+    for (final row in BftScoreChart.running) {
+      final time = row[0]!;
+      final score = row[column + 1];
+      if (score != null &&
+          time >= chartTime &&
+          time < nearestSlowerTime) {
+        nearestSlowerTime = time.toDouble();
+        nearestSlowerScore = score;
+      }
+    }
+
+    return (nearestSlowerScore ?? 0).toDouble();
   }
 
   /// Calculate average percentage from three components
@@ -95,11 +117,32 @@ class BftCalculatorUtils {
     return (pushupsPercentage + situpsPercentage + runningPercentage) / 3;
   }
 
-  /// Cap percentage between 0 and 100
-  static double _capPercentage(double percentage) {
-    if (percentage > 100.0) return 100.0;
-    if (percentage < 0.0) return 0.0;
-    return percentage;
+  static double _lookupRepetitionScore(
+    List<List<int?>> chart,
+    int repetitions,
+    int column,
+  ) {
+    int? bestScore;
+    var bestRepetitions = -1;
+
+    for (final row in chart) {
+      final chartRepetitions = row[0]!;
+      final score = row[column + 1];
+      if (score != null &&
+          chartRepetitions <= repetitions &&
+          chartRepetitions > bestRepetitions) {
+        bestRepetitions = chartRepetitions;
+        bestScore = score;
+      }
+    }
+
+    return (bestScore ?? 0).toDouble();
+  }
+
+  static int _chartColumn(int age, String gender) {
+    final ageGroup = ((age - 17) ~/ 5).clamp(0, 7);
+    final genderOffset = gender.toLowerCase() == 'male' ? 0 : 1;
+    return ageGroup * 2 + genderOffset;
   }
 
   /// Validate age input
